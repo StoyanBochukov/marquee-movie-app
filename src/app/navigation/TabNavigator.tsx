@@ -26,7 +26,11 @@ export function TabNavigator() {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarIcon: tabIcon(House) }} />
-      <Tab.Screen name="Search" component={SearchScreen} options={{ tabBarIcon: tabIcon(Search) }} />
+      <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ tabBarIcon: tabIcon(Search) }}
+      />
       <Tab.Screen
         name="MyList"
         component={MyListScreen}

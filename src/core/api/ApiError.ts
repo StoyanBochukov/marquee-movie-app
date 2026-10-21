@@ -26,13 +26,20 @@ const USER_MESSAGES: Record<ApiErrorKind, string> = {
 export class ApiError extends Error {
   readonly kind: ApiErrorKind;
   readonly status?: number;
+  /** Parsed response body, when the server sent one alongside an error status. */
+  readonly body?: unknown;
   override readonly cause?: unknown;
 
-  constructor(kind: ApiErrorKind, message?: string, options?: { status?: number; cause?: unknown }) {
+  constructor(
+    kind: ApiErrorKind,
+    message?: string,
+    options?: { status?: number; body?: unknown; cause?: unknown },
+  ) {
     super(message ?? USER_MESSAGES[kind]);
     this.name = 'ApiError';
     this.kind = kind;
     this.status = options?.status;
+    this.body = options?.body;
     this.cause = options?.cause;
   }
 

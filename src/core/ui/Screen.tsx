@@ -16,11 +16,7 @@ export function Screen({ children, edges = ['top'], style }: ScreenProps) {
     paddingBottom: edges.includes('bottom') ? insets.bottom : 0,
   };
 
-  return (
-    <View style={[styles.container, insetStyle, style]}>
-      {children}
-    </View>
-  );
+  return <View style={[styles.container, insetStyle, style]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

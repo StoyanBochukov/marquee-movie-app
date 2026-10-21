@@ -9,7 +9,9 @@ export type AppTextProps = TextProps & {
 };
 
 function AppTextBase({ variant = 'body', color = 'text', style, ...rest }: AppTextProps) {
-  return <Text {...rest} style={[styles.base, typography[variant], { color: colors[color] }, style]} />;
+  return (
+    <Text {...rest} style={[styles.base, typography[variant], { color: colors[color] }, style]} />
+  );
 }
 
 export const AppText = memo(AppTextBase);
