@@ -5,12 +5,15 @@ import { isApiError } from '@/core/api/ApiError';
 
 const MAX_RETRIES = 2;
 
+/** Persisted entries older than this are dropped; gcTime must be at least as long. */
+export const CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24;
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // Movie metadata barely changes and the free OMDb tier allows ~1,000 requests/day.
       staleTime: 1000 * 60 * 60,
-      gcTime: 1000 * 60 * 60 * 24,
+      gcTime: CACHE_MAX_AGE_MS,
       retry: (failureCount, error) =>
         failureCount < MAX_RETRIES && (!isApiError(error) || error.isRetryable),
     },

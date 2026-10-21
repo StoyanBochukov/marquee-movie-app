@@ -5,4 +5,5 @@ export { useMovieDetails, usePrefetchMovieDetails } from './hooks/useMovieDetail
 export { getPosterUri, type PosterSize } from './utils/poster';
 export { MovieCard, type MovieCardProps } from './components/MovieCard';
 export { MovieRow, type MovieRowProps } from './components/MovieRow';
+export { MovieGrid, type MovieGridProps } from './components/MovieGrid';
 export { CARD_GAP, CARD_LAYOUT, type CardVariant } from './components/cardLayout';

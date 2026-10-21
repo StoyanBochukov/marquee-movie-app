@@ -8,7 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { TabScreenProps } from '@/app/navigation/types';
 import { colors, spacing } from '@/core/theme';
 import { useOpenMovieDetails } from '@/features/movie-details';
-import { movieKeys, MovieRow } from '@/features/movies';
+import { movieKeys, MovieRow, type MovieSummary } from '@/features/movies';
+import { MyListButton } from '@/features/my-list';
 
 import { HeroBanner } from '../components/HeroBanner';
 import { HEADER_CONTENT_HEIGHT, HomeHeader } from '../components/HomeHeader';
@@ -40,7 +41,11 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
   const renderItem = useCallback<ListRenderItem<FeedItem>>(
     ({ item }) =>
       item.kind === 'hero' ? (
-        <HeroBanner movieId={item.movieId} onPressDetails={openDetails} />
+        <HeroBanner
+          movieId={item.movieId}
+          onPressDetails={openDetails}
+          renderActions={renderHeroActions}
+        />
       ) : (
         <MovieRow
           title={item.row.title}
@@ -88,9 +93,14 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
   );
 }
 
+const renderHeroActions = (movie: MovieSummary) => (
+  <MyListButton movie={movie} style={styles.heroAction} />
+);
+
 const feedKeyExtractor = (item: FeedItem) => (item.kind === 'hero' ? 'hero' : item.row.id);
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { paddingBottom: spacing.xl },
+  heroAction: { minWidth: 130 },
 });

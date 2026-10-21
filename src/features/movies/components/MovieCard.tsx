@@ -16,9 +16,18 @@ export type MovieCardProps = {
   rank?: number;
   onPress: (movie: MovieSummary) => void;
   onPressIn?: (movie: MovieSummary) => void;
+  /** Overrides the poster width (height keeps the 2:3 ratio), e.g. for responsive grids. */
+  width?: number;
 };
 
-function MovieCardBase({ movie, variant = 'poster', rank, onPress, onPressIn }: MovieCardProps) {
+function MovieCardBase({
+  movie,
+  variant = 'poster',
+  rank,
+  onPress,
+  onPressIn,
+  width,
+}: MovieCardProps) {
   const label = rank
     ? `Number ${rank}, ${movie.title}, ${movie.year}`
     : `${movie.title}, ${movie.year}`;
@@ -30,7 +39,10 @@ function MovieCardBase({ movie, variant = 'poster', rank, onPress, onPressIn }: 
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint="Opens movie details"
-      style={styles[variant]}
+      style={[
+        styles[variant],
+        variant === 'poster' && width ? { width, height: width * 1.5 } : null,
+      ]}
     >
       {variant === 'wide' ? <WideContent movie={movie} /> : null}
       {variant === 'poster' ? (
