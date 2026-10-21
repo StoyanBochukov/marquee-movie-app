@@ -1,7 +1,11 @@
 import { Trophy } from 'lucide-react-native';
 import { useMemo, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { RootStackScreenProps } from '@/app/navigation/types';
@@ -95,7 +99,7 @@ export function MovieDetailsScreen({ route, navigation, renderActions }: MovieDe
           {isPlaceholderData ? (
             <DetailsBodySkeleton />
           ) : (
-            <>
+            <Animated.View entering={FadeIn.duration(250)} style={styles.sections}>
               <MetaLine movie={movie} />
 
               {movie.genres.length > 0 ? (
@@ -146,7 +150,7 @@ export function MovieDetailsScreen({ route, navigation, renderActions }: MovieDe
                   { label: 'Box office', value: movie.boxOffice },
                 ]}
               />
-            </>
+            </Animated.View>
           )}
         </View>
 
@@ -175,6 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   title: { textAlign: 'center' },
+  sections: { gap: spacing.lg },
   chips: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm },
   actions: { flexDirection: 'row', justifyContent: 'center', gap: spacing.md },
   awards: {
