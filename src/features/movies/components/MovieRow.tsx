@@ -23,6 +23,8 @@ export type MovieRowProps = {
   onPressMovie: (movie: MovieSummary) => void;
   /** Titles to leave out, e.g. the movie currently on screen. */
   excludeIds?: readonly string[];
+  /** Drops entries without artwork; OMDb keyword matches are often posterless extras. */
+  hidePosterless?: boolean;
 };
 
 /**
@@ -35,6 +37,7 @@ function MovieRowBase({
   variant = 'poster',
   onPressMovie,
   excludeIds,
+  hidePosterless = false,
 }: MovieRowProps) {
   const {
     data,
@@ -50,11 +53,11 @@ function MovieRowBase({
   const isRanked = variant === 'ranked';
 
   const movies = useMemo(() => {
-    const visible = excludeIds?.length
-      ? (data?.movies ?? []).filter(movie => !excludeIds.includes(movie.id))
-      : data?.movies ?? [];
+    const visible = (data?.movies ?? []).filter(
+      movie => !excludeIds?.includes(movie.id) && (!hidePosterless || movie.posterUrl !== null),
+    );
     return isRanked ? visible.slice(0, RANKED_LIMIT) : visible;
-  }, [data?.movies, excludeIds, isRanked]);
+  }, [data?.movies, excludeIds, hidePosterless, isRanked]);
 
   const handlePressIn = useCallback(
     (movie: MovieSummary) => {
