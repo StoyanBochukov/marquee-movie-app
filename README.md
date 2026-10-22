@@ -52,7 +52,7 @@ All brand assets are generated from one vector definition in `scripts/generate-b
 
 | Tool                 | Version                                                           |
 | -------------------- | ----------------------------------------------------------------- |
-| Node                 | ≥ 22.11                                                           |
+| Node                 | ≥ 22.13 (required by React Native 0.88)                           |
 | JDK                  | 17 (Android)                                                      |
 | Android Studio / SDK | API 35 emulator or a device                                       |
 | Xcode                | 16+ with the license accepted (`sudo xcodebuild -license accept`) |
@@ -75,6 +75,10 @@ cd ios && bundle exec pod install && cd ..
 npm start                     # Metro
 npm run android               # or: npm run ios
 ```
+
+If `bundle install` fails, you're probably on macOS's system Ruby (2.6), which can't install gems without `sudo`. Either use a Ruby version manager such as `rbenv`, or run `cd ios && pod install` with a globally installed CocoaPods (1.13 or later, except 1.15.0 and 1.15.1).
+
+iOS was verified on an iPhone 17 Pro simulator running iOS 26.5. On the older iOS 17.5 simulator runtime, the app crashes at launch with a missing `libc++` symbol (`std::exception_ptr::__from_native_exception_pointer`). That comes from React Native 0.88's prebuilt iOS core being compiled with the Xcode 26 toolchain; it is not caused by this app's code. Use an iOS 18+ simulator, or build React Native from source with `RCT_USE_PREBUILT_RNCORE=0 pod install`.
 
 `.env` is read at build time by `react-native-config`. After changing it, rebuild the native app; a Metro reload is not enough. At startup the app validates its configuration with Zod and fails fast with a clear message if the key is missing.
 
@@ -224,7 +228,7 @@ npm test
 - Native modules are mocked in `jest.setup.ts`: config, MMKV and icons. Reanimated is replaced with a tiny synchronous double in `test/mocks/reanimated.ts`, because the official mock doesn't boot under the RN 0.88 preset.
 - **CI** (`.github/workflows/ci.yml`) runs the type check, lint (zero warnings) and tests with coverage on every push and PR. It needs no API key.
 
-The app was verified manually on an Android emulator (Pixel 7a, API 35), including offline and reconnect, cache restore without network, and My List persistence across restarts.
+The app was verified manually on an Android emulator (Pixel 7a, API 35) and an iOS simulator (iPhone 17 Pro, iOS 26.5), including offline and reconnect, cache restore without network, and My List persistence across restarts.
 
 ## What I'd do next
 
