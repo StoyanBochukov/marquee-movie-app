@@ -5,6 +5,8 @@ import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
+import com.swmansion.rnscreens.fragment.restoration.RNScreensFragmentFactory
+import com.zoontek.rnbootsplash.RNBootSplash
 
 class MainActivity : ReactActivity() {
 
@@ -15,11 +17,13 @@ class MainActivity : ReactActivity() {
   override fun getMainComponentName(): String = "MovieTask"
 
   /**
-   * react-native-screens restores fragments itself; passing the saved state would crash on
-   * process restoration.
+   * The fragment factory lets react-native-screens survive process restoration; the splash must be
+   * installed before super.onCreate so it covers the first frame.
    */
   override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(null)
+    supportFragmentManager.fragmentFactory = RNScreensFragmentFactory()
+    RNBootSplash.init(this, R.style.BootTheme)
+    super.onCreate(savedInstanceState)
   }
 
   /**

@@ -5,6 +5,8 @@ import { MovieDetailsScreen } from '@/features/movie-details';
 import type { MovieDetails } from '@/features/movies';
 import { MyListButton } from '@/features/my-list';
 
+import { useHideSplashWhenReady } from '../hooks/useHideSplashWhenReady';
+
 import { navigationTheme } from './navigationTheme';
 import { TabNavigator } from './TabNavigator';
 import type { RootStackParamList, RootStackScreenProps } from './types';
@@ -22,8 +24,10 @@ function MovieDetailsRoute(props: RootStackScreenProps<'MovieDetails'>) {
 }
 
 export function RootNavigator() {
+  const onNavigationReady = useHideSplashWhenReady();
+
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer theme={navigationTheme} onReady={onNavigationReady}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Tabs" component={TabNavigator} />
         <Stack.Screen

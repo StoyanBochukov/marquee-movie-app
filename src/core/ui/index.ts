@@ -1,4 +1,5 @@
 export * from './AppText';
+export * from './Wordmark';
 export * from './Button';
 export * from './Chip';
 export * from './ErrorState';

@@ -1,4 +1,6 @@
-# Reelix
+<img src="docs/screenshots/icon.png" width="96" alt="Marquee app icon" align="right" />
+
+# Marquee
 
 A Netflix-style movie browser built with **React Native 0.88 (CLI, New Architecture)**, **TypeScript** and the **OMDb API**.
 
@@ -33,6 +35,16 @@ The home screen is a vertical feed of horizontal shelves. Tapping any title open
   - An animated offline banner.
   - Queries pause while offline and refetch automatically on reconnect.
   - The query cache is persisted, so a cold start without network still shows the last feed.
+- **Branding**
+  - The name comes from the lit sign above a cinema entrance. The mark is a folded red "M" inside a ring of alternating lit and dim bulbs, like chase lights.
+  - The icon covers iOS (a single 1024px universal icon) and Android (adaptive foreground and background layers, a monochrome layer for Android 13+ themed icons, plus legacy square and round PNGs).
+  - The native launch screen uses [`react-native-bootsplash`](https://github.com/zoontek/react-native-bootsplash): the Android 12+ splash API and an iOS storyboard. It stays up until navigation has mounted and the persisted cache has been restored, then fades out. The first frame users see is therefore the cached feed, not skeletons.
+
+| Launch screen                          | Launcher                                   |
+| -------------------------------------- | ------------------------------------------ |
+| ![Splash](docs/screenshots/splash.jpg) | ![Launcher](docs/screenshots/launcher.jpg) |
+
+All brand assets are generated from one vector definition in `scripts/generate-brand-assets.mjs`. Run `npm run brand` to regenerate the icons and the splash after changing the artwork.
 
 ## Getting started
 

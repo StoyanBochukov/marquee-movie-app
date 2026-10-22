@@ -4,7 +4,7 @@ import Animated, { interpolate, useAnimatedStyle, type SharedValue } from 'react
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, spacing } from '@/core/theme';
-import { AppText, PressableScale } from '@/core/ui';
+import { PressableScale, Wordmark } from '@/core/ui';
 
 export const HEADER_CONTENT_HEIGHT = 52;
 const FADE_DISTANCE = 160;
@@ -27,9 +27,7 @@ export function HomeHeader({ scrollY, onPressSearch }: HomeHeaderProps) {
       <View style={styles.scrim} pointerEvents="none" />
       <Animated.View style={[styles.background, backgroundStyle]} pointerEvents="none" />
       <View style={styles.content} pointerEvents="box-none">
-        <AppText variant="title" style={styles.wordmark} accessibilityRole="header">
-          REELIX
-        </AppText>
+        <Wordmark />
         <PressableScale
           onPress={onPressSearch}
           accessibilityRole="button"
@@ -57,5 +55,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
   },
-  wordmark: { color: colors.primary, fontWeight: '900', letterSpacing: 2 },
 });

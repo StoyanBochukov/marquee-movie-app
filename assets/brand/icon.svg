@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  
+  <defs>
+    <linearGradient id="bar" x1="0" y1="-0.4" x2="0" y2="0.4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF3B45"/>
+      <stop offset="0.55" stop-color="#E50914"/>
+      <stop offset="1" stop-color="#A3060F"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="-0.4" x2="0" y2="0.4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9E0710"/>
+      <stop offset="1" stop-color="#6E040A"/>
+    </linearGradient>
+    <radialGradient id="bulb" cx="0.4" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.45" stop-color="#FFE7AD"/>
+      <stop offset="1" stop-color="#F5B53D"/>
+    </radialGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#FFD27A" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FFD27A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="backdrop" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#2B070B"/>
+      <stop offset="1" stop-color="#0A0A0F"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#backdrop)"/>
+  <g transform="translate(512 512) scale(409.6)">
+    <g>
+      
+      <circle cx="0.0000" cy="-0.9000" r="0.11" fill="url(#glow)"/>
+      <circle cx="0.0000" cy="-0.9000" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="0.2781" cy="-0.8560" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="0.5290" cy="-0.7281" r="0.11" fill="url(#glow)"/>
+      <circle cx="0.5290" cy="-0.7281" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="0.7281" cy="-0.5290" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="0.8560" cy="-0.2781" r="0.11" fill="url(#glow)"/>
+      <circle cx="0.8560" cy="-0.2781" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="0.9000" cy="0.0000" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="0.8560" cy="0.2781" r="0.11" fill="url(#glow)"/>
+      <circle cx="0.8560" cy="0.2781" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="0.7281" cy="0.5290" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="0.5290" cy="0.7281" r="0.11" fill="url(#glow)"/>
+      <circle cx="0.5290" cy="0.7281" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="0.2781" cy="0.8560" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="0.0000" cy="0.9000" r="0.11" fill="url(#glow)"/>
+      <circle cx="0.0000" cy="0.9000" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="-0.2781" cy="0.8560" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="-0.5290" cy="0.7281" r="0.11" fill="url(#glow)"/>
+      <circle cx="-0.5290" cy="0.7281" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="-0.7281" cy="0.5290" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="-0.8560" cy="0.2781" r="0.11" fill="url(#glow)"/>
+      <circle cx="-0.8560" cy="0.2781" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="-0.9000" cy="0.0000" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="-0.8560" cy="-0.2781" r="0.11" fill="url(#glow)"/>
+      <circle cx="-0.8560" cy="-0.2781" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="-0.7281" cy="-0.5290" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <circle cx="-0.5290" cy="-0.7281" r="0.11" fill="url(#glow)"/>
+      <circle cx="-0.5290" cy="-0.7281" r="0.055" fill="url(#bulb)" opacity="1"/>
+      
+      <circle cx="-0.2781" cy="-0.8560" r="0.055" fill="url(#bulb)" opacity="0.45"/>
+      <!-- the fold of the M sits behind the uprights -->
+      <polygon points="-0.46,-0.38 -0.25,-0.38 0,0.05 0.25,-0.38 0.46,-0.38 0,0.40" fill="url(#fold)"/>
+      <rect x="-0.46" y="-0.38" width="0.21" height="0.78" rx="0.025" fill="url(#bar)"/>
+      <rect x="0.25" y="-0.38" width="0.21" height="0.78" rx="0.025" fill="url(#bar)"/>
+    </g></g>
+</svg>
