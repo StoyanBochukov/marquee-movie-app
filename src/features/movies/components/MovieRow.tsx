@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { getUserMessage } from '@/core/api';
 import { colors, spacing } from '@/core/theme';
-import { AppText, ErrorState, Skeleton } from '@/core/ui';
+import { AppText, ErrorBoundary, ErrorState, Skeleton, useErrorBoundary } from '@/core/ui';
 
 import { usePrefetchMovieDetails } from '../hooks/useMovieDetails';
 import { useMovieSearch } from '../hooks/useMovieSearch';
@@ -29,9 +29,29 @@ export type MovieRowProps = {
 
 /**
  * A self-contained horizontal shelf: it owns its query, loading, error and pagination state,
- * so one failing row never affects the rest of the screen.
+ * and its own error boundary, so one failing row never affects the rest of the screen.
  */
-function MovieRowBase({
+function MovieRowBase(props: MovieRowProps) {
+  return (
+    <ErrorBoundary fallback={<RowErrorFallback title={props.title} />}>
+      <MovieRowContent {...props} />
+    </ErrorBoundary>
+  );
+}
+
+function RowErrorFallback({ title }: { title: string }) {
+  const { reset } = useErrorBoundary();
+  return (
+    <View style={styles.container}>
+      <AppText variant="subtitle" style={styles.title} accessibilityRole="header">
+        {title}
+      </AppText>
+      <ErrorState compact message="This row couldn't be displayed." onRetry={reset} />
+    </View>
+  );
+}
+
+function MovieRowContent({
   title,
   query,
   variant = 'poster',

@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { TabScreenProps } from '@/app/navigation/types';
 import { colors, spacing } from '@/core/theme';
+import { ErrorBoundary, ErrorState, useErrorBoundary } from '@/core/ui';
 import { useOpenMovieDetails } from '@/features/movie-details';
 import { movieKeys, MovieRow, type MovieSummary } from '@/features/movies';
 import { MyListButton } from '@/features/my-list';
@@ -41,11 +42,13 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
   const renderItem = useCallback<ListRenderItem<FeedItem>>(
     ({ item }) =>
       item.kind === 'hero' ? (
-        <HeroBanner
-          movieId={item.movieId}
-          onPressDetails={openDetails}
-          renderActions={renderHeroActions}
-        />
+        <ErrorBoundary fallback={<HeroErrorFallback />}>
+          <HeroBanner
+            movieId={item.movieId}
+            onPressDetails={openDetails}
+            renderActions={renderHeroActions}
+          />
+        </ErrorBoundary>
       ) : (
         <MovieRow
           title={item.row.title}
@@ -72,8 +75,6 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
         data={items}
         renderItem={renderItem}
         keyExtractor={feedKeyExtractor}
-        // Each shelf is its own type so cells are never recycled into a different shelf,
-        // which would carry over its horizontal scroll offset.
         getItemType={feedKeyExtractor}
         onScroll={onScroll}
         scrollEventThrottle={16}
@@ -97,10 +98,24 @@ const renderHeroActions = (movie: MovieSummary) => (
   <MyListButton movie={movie} style={styles.heroAction} />
 );
 
+function HeroErrorFallback() {
+  const { reset } = useErrorBoundary();
+  const insets = useSafeAreaInsets();
+  return (
+    <ErrorState
+      compact
+      message="The featured title couldn't be displayed."
+      onRetry={reset}
+      style={[styles.heroError, { marginTop: insets.top + HEADER_CONTENT_HEIGHT }]}
+    />
+  );
+}
+
 const feedKeyExtractor = (item: FeedItem) => (item.kind === 'hero' ? 'hero' : item.row.id);
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { paddingBottom: spacing.xl },
   heroAction: { minWidth: 130 },
+  heroError: { marginBottom: spacing.xl },
 });
