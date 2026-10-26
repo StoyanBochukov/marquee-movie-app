@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { interpolate, useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useReduceMotion } from '@/core/hooks/useReduceMotion';
 import { colors, radii } from '@/core/theme';
 import { PosterImage } from '@/core/ui';
 import { getPosterUri, type MovieSummary } from '@/features/movies';
@@ -18,33 +19,40 @@ type DetailsBackdropProps = {
 /** Blurred poster backdrop with parallax; the blur uses the smallest poster since detail is lost anyway. */
 export function DetailsBackdrop({ movie, scrollY }: DetailsBackdropProps) {
   const insets = useSafeAreaInsets();
+  // Parallax is pure decoration; with Reduce Motion the backdrop simply scrolls with the content.
+  const parallax = !useReduceMotion();
 
-  const backdropStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateY: interpolate(
-          scrollY.value,
-          [-200, 0, BACKDROP_HEIGHT],
-          [-100, 0, BACKDROP_HEIGHT * 0.4],
-          'clamp',
-        ),
-      },
-      { scale: interpolate(scrollY.value, [-200, 0], [1.4, 1], 'clamp') },
-    ],
-  }));
+  const backdropStyle = useAnimatedStyle(() => {
+    if (!parallax) return { transform: [] };
+    return {
+      transform: [
+        {
+          translateY: interpolate(
+            scrollY.value,
+            [-200, 0, BACKDROP_HEIGHT],
+            [-100, 0, BACKDROP_HEIGHT * 0.4],
+            'clamp',
+          ),
+        },
+        { scale: interpolate(scrollY.value, [-200, 0], [1.4, 1], 'clamp') },
+      ],
+    };
+  });
 
   const posterStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [0, BACKDROP_HEIGHT * 0.6], [1, 0], 'clamp'),
-    transform: [
-      {
-        translateY: interpolate(
-          scrollY.value,
-          [0, BACKDROP_HEIGHT],
-          [0, BACKDROP_HEIGHT * 0.25],
-          'clamp',
-        ),
-      },
-    ],
+    transform: parallax
+      ? [
+          {
+            translateY: interpolate(
+              scrollY.value,
+              [0, BACKDROP_HEIGHT],
+              [0, BACKDROP_HEIGHT * 0.25],
+              'clamp',
+            ),
+          },
+        ]
+      : [],
   }));
 
   return (

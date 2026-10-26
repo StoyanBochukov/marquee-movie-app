@@ -35,6 +35,10 @@ The home screen is a vertical feed of horizontal shelves. Tapping any title open
   - An animated offline banner.
   - Queries pause while offline and refetch automatically on reconnect.
   - The query cache is persisted, so a cold start without network still shows the last feed.
+- **Resilience**
+  - Error boundaries at three levels: each shelf (including "More like this"), the hero, and the whole app.
+  - A rendering bug in one shelf replaces only that shelf with a "couldn't be displayed — Retry" card. Anything uncaught shows a branded "Something went wrong — Try again" screen, never a blank one. That screen also hides the launch screen, so a crash during startup can't leave the app stuck on the logo.
+  - Fallbacks read the error and `reset` through a `useErrorBoundary()` hook, so every fallback is a real component and can safely use hooks.
 - **Branding**
   - The name comes from the lit sign above a cinema entrance. The mark is a folded red "M" inside a ring of alternating lit and dim bulbs, like chase lights.
   - The icon covers iOS (a single 1024px universal icon) and Android (adaptive foreground and background layers, a monochrome layer for Android 13+ themed icons, plus legacy square and round PNGs).
@@ -52,7 +56,7 @@ All brand assets are generated from one vector definition in `scripts/generate-b
 
 | Tool                 | Version                                                           |
 | -------------------- | ----------------------------------------------------------------- |
-| Node                 | ≥ 22.13 (required by React Native 0.88)                           |
+| Node                 | ≥ 22.13 (required by React Native 0.88; `nvm use` reads `.nvmrc`) |
 | JDK                  | 17 (Android)                                                      |
 | Android Studio / SDK | API 35 emulator or a device                                       |
 | Xcode                | 16+ with the license accepted (`sudo xcodebuild -license accept`) |
@@ -193,6 +197,9 @@ OMDb JSON ──► httpClient ──► zod schema (DTO) ──► mapper ─�
 - Every card has an `accessibilityLabel` (title and year) and a button role.
 - Filter chips use tab semantics, and error states have a labelled Retry.
 - Dynamic type is respected but capped (`maxFontSizeMultiplier`) so dense UI like cards stays usable.
+- **Reduce Motion is respected.** Reanimated already shortens timed and enter/exit animations when the system setting is on. A live `useReduceMotion` hook covers the motion it can't see: the scroll-driven parallax on the details screen is disabled, and opening a title fades in instead of sliding.
+
+**Dark only, also at the native level.** iOS declares `UIUserInterfaceStyle = Dark`, and Android uses a non-DayNight theme with the brand background as its window colour. System UI therefore never flips to light when the phone is in light mode: the keyboard (dark on iOS), alerts, and the window behind the first frame all stay dark.
 
 ## OMDb limitations and how they're handled
 
@@ -237,5 +244,5 @@ The app was verified manually on an Android emulator (Pixel 7a, API 35) and an i
 - **Shared element transition** from card to details poster, once Reanimated's shared transitions are stable on the New Architecture.
 - **Continue watching / recently viewed** shelf, built on the same persisted store pattern as My List.
 - **Tablet and landscape layouts:** the grid already computes columns from width, and shelves could follow.
-- **i18n** for UI strings, plus crash and performance monitoring (Sentry, for example).
+- **i18n** for UI strings, plus crash and performance monitoring (Sentry, for example). The error boundaries already accept an `onError` callback, which is where crash reporting plugs in.
 - **Image pipeline:** consider a prefetch queue for the next shelf's posters while scrolling.

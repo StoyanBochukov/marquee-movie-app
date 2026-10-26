@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { useReduceMotion } from '@/core/hooks/useReduceMotion';
 import { MovieDetailsScreen } from '@/features/movie-details';
 import type { MovieDetails } from '@/features/movies';
 import { MyListButton } from '@/features/my-list';
@@ -25,6 +26,7 @@ function MovieDetailsRoute(props: RootStackScreenProps<'MovieDetails'>) {
 
 export function RootNavigator() {
   const onNavigationReady = useHideSplashWhenReady();
+  const reduceMotion = useReduceMotion();
 
   return (
     <NavigationContainer theme={navigationTheme} onReady={onNavigationReady}>
@@ -33,7 +35,7 @@ export function RootNavigator() {
         <Stack.Screen
           name="MovieDetails"
           component={MovieDetailsRoute}
-          options={{ animation: 'slide_from_right' }}
+          options={{ animation: reduceMotion ? 'fade' : 'slide_from_right' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
