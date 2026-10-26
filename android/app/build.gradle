@@ -83,11 +83,13 @@ android {
         buildConfig true
     }
     defaultConfig {
-        applicationId "com.movietask"
+        applicationId "com.marquee.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        // react-native-config looks up BuildConfig by applicationId unless told the namespace.
+        resValue "string", "build_config_package", "com.movietask"
     }
     signingConfigs {
         debug {

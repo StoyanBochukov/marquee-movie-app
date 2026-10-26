@@ -1,7 +1,8 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+    <!-- Dark-only app: system UI (keyboard, dialogs, window background) must not follow light mode. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <item name="android:windowBackground">@color/bootsplash_background</item>
     </style>
 
     <style name="BootTheme" parent="Theme.BootSplash">

@@ -22,6 +22,7 @@ export function SearchBar({ value, onChangeText, onSubmit }: SearchBarProps) {
         placeholderTextColor={colors.textMuted}
         selectionColor={colors.primary}
         returnKeyType="search"
+        keyboardAppearance="dark"
         autoCorrect={false}
         autoCapitalize="none"
         clearButtonMode="never"
