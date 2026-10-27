@@ -89,12 +89,13 @@ iOS was verified on an iPhone 17 Pro simulator running iOS 26.5. On the older iO
 
 ### Scripts
 
-| Script              | What it does                                        |
-| ------------------- | --------------------------------------------------- |
-| `npm run typecheck` | `tsc --noEmit` (strict, `noUncheckedIndexedAccess`) |
-| `npm run lint`      | ESLint, including the architectural import rules    |
-| `npm test`          | Jest unit and component tests                       |
-| `npm run validate`  | All three, the same as CI                           |
+| Script                  | What it does                                                                                                                                                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run typecheck`     | `tsc --noEmit` (strict, `noUncheckedIndexedAccess`)                                                                                                         |
+| `npm run lint`          | ESLint, including the architectural import rules                                                                                                            |
+| `npm test`              | Jest unit and component tests                                                                                                                               |
+| `npm run validate`      | All three, the same as CI                                                                                                                                   |
+| `npm run audit:posters` | Checks every home-feed title's poster: OMDb's raw value, the original URL and each resized URL the app loads. Needs `.env` and network; takes a few minutes |
 
 ## Architecture
 

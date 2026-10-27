@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "validate": "npm run typecheck && npm run lint && npm test",
+    "audit:posters": "node --experimental-strip-types --no-warnings scripts/audit-posters.mjs",
     "brand": "node scripts/generate-brand-assets.mjs && react-native-bootsplash generate assets/brand/logo.svg --platforms=android,ios --background=0A0A0F --logo-width=128 --assets-output=assets/bootsplash"
   },
   "dependencies": {
