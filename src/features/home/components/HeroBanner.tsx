@@ -35,6 +35,7 @@ function HeroBannerBase({ movieId, onPressDetails, renderActions }: HeroBannerPr
     <View style={{ width, height }} accessibilityLabel={`Featured: ${movie.title}`}>
       <PosterImage
         uri={getPosterUri(movie.posterUrl, 'hero')}
+        fallbackUri={movie.posterUrl}
         title={movie.title}
         style={StyleSheet.absoluteFill}
       />

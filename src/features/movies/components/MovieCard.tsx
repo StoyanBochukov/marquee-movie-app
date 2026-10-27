@@ -48,6 +48,7 @@ function MovieCardBase({
       {variant === 'poster' ? (
         <PosterImage
           uri={getPosterUri(movie.posterUrl, 'card')}
+          fallbackUri={movie.posterUrl}
           title={movie.title}
           style={styles.posterImage}
         />
@@ -61,6 +62,7 @@ function MovieCardBase({
           />
           <PosterImage
             uri={getPosterUri(movie.posterUrl, 'card')}
+            fallbackUri={movie.posterUrl}
             title={movie.title}
             style={styles.rankedPoster}
           />
@@ -75,6 +77,7 @@ function WideContent({ movie }: { movie: MovieSummary }) {
     <>
       <PosterImage
         uri={getPosterUri(movie.posterUrl, 'card')}
+        fallbackUri={movie.posterUrl}
         title={movie.title}
         style={StyleSheet.absoluteFill}
       />

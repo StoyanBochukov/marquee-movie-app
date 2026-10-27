@@ -60,6 +60,7 @@ export function DetailsBackdrop({ movie, scrollY }: DetailsBackdropProps) {
       <Animated.View style={[StyleSheet.absoluteFill, backdropStyle]}>
         <PosterImage
           uri={getPosterUri(movie.posterUrl, 'thumb')}
+          fallbackUri={movie.posterUrl}
           blurRadius={24}
           style={StyleSheet.absoluteFill}
         />
@@ -69,6 +70,7 @@ export function DetailsBackdrop({ movie, scrollY }: DetailsBackdropProps) {
       <Animated.View style={[styles.posterWrapper, { paddingTop: insets.top + 56 }, posterStyle]}>
         <PosterImage
           uri={getPosterUri(movie.posterUrl, 'card')}
+          fallbackUri={movie.posterUrl}
           title={movie.title}
           style={styles.poster}
         />
