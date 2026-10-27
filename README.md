@@ -69,7 +69,8 @@ Follow the official [environment setup guide](https://reactnative.dev/docs/set-u
 ```sh
 npm install
 
-# Configure the OMDb key (get a free one at https://www.omdbapi.com/apikey.aspx)
+# Configure the OMDb key (get a free one at https://www.omdbapi.com/apikey.aspx).
+# Skip this if your copy already contains a .env, as the review zip does.
 cp .env.example .env          # then set OMDB_API_KEY
 
 # iOS (first time, and whenever native deps change)
@@ -129,14 +130,14 @@ flowchart TD
 
 ```
 src/
-├── app/                # Composition root: providers, navigation, global UI (offline banner)
+├── app/                # Composition root: providers, navigation, global UI (offline banner, crash screen), splash hand-off
 ├── core/               # Reusable building blocks, no knowledge of movies
 │   ├── api/            # fetch wrapper with timeouts/abort + typed ApiError
 │   ├── config/         # env validated with zod
-│   ├── hooks/          # generic hooks (useDebouncedValue)
+│   ├── hooks/          # generic hooks (useDebouncedValue, useReduceMotion)
 │   ├── storage/        # MMKV instances behind a small KeyValueStorage interface
 │   ├── theme/          # design tokens (colors, spacing, radii, typography)
-│   └── ui/             # AppText, Button, PosterImage, Skeleton, ErrorState, ...
+│   └── ui/             # AppText, Button, PosterImage, Skeleton, ErrorState, ErrorBoundary, ...
 └── features/
     ├── movies/         # Domain: OMDb DTOs → zod → mappers → domain models, query hooks, cards, rows, grid
     ├── home/           # Feed config, hero, header, home screen
@@ -166,9 +167,9 @@ OMDb JSON ──► httpClient ──► zod schema (DTO) ──► mapper ─�
 
 ## Key decisions and trade-offs
 
-**React Native CLI instead of Expo.** The plan only needed one Expo module (images), and the RN 0.88 `Image` already honors the year-long `Cache-Control` headers on OMDb's poster CDN. The bare CLI keeps the binary and dependency tree small and runs on the New Architecture (Fabric and TurboModules) with Hermes by default. The cost is more native setup: CocoaPods, Gradle and `react-native-config`.
+**React Native CLI instead of Expo.** The only Expo module worth adding would have been an image library, and the RN 0.88 `Image` already honors the year-long `Cache-Control` headers on OMDb's poster CDN. The bare CLI keeps the binary and dependency tree small and runs on the New Architecture (Fabric and TurboModules) with Hermes by default. The cost is more native setup: CocoaPods, Gradle and `react-native-config`.
 
-**A config-driven feed.** OMDb has no "trending", "popular" or genre endpoints, only title search. The home feed is therefore declared in `features/home/config/feed.ts` as a list of shelves (`title`, `query`, `variant`, optional `type`), and each shelf owns its own query. Adding a row is a one-line change, and in a real product this config would come from a CMS or backend. The featured hero rotates daily through a curated list of IMDb ids.
+**A config-driven feed.** OMDb has no "trending", "popular" or genre endpoints, only title search. The home feed is therefore declared in `features/home/config/feed.ts` as a list of shelves (`id`, `title`, a search `query` with an optional media `type`, and a card `variant`), and each shelf owns its own query. Adding a row is a one-line change, and in a real product this config would come from a CMS or backend. The featured hero rotates daily through a curated list of IMDb ids.
 
 **Per-shelf isolation.** Each `MovieRow` handles its own loading, error, retry, empty and pagination states. One failing or empty search hides or degrades that shelf only. Shelves are also kept in separate recycling pools in the vertical FlashList (`getItemType`), so a shelf's horizontal scroll position never leaks into another.
 
@@ -176,7 +177,7 @@ OMDb JSON ──► httpClient ──► zod schema (DTO) ──► mapper ─�
 
 - Details open instantly using `placeholderData`. The screen first looks for the tapped title in any cached search, then falls back to the navigation params, and only skeletons the rest.
 - `onPressIn` prefetches the full record, so it often arrives before the push animation finishes.
-- Poster URLs are rewritten to the size they're displayed at (`._V1_SX400.jpg`), so cards download a fraction of the bytes of the full-size originals.
+- Poster URLs are rewritten to the size they're displayed at (`._V1_SX400.jpg`), so cards download a fraction of the bytes of the full-size originals. If a resized variant fails, the original URL is tried before the fallback tile.
 - Cards are memoized, lists use FlashList v2, images fade in, and pressables scale on the UI thread with Reanimated.
 
 **Cache policy and request budget.** The free OMDb tier allows about 1,000 requests a day, and movie metadata rarely changes.
@@ -231,7 +232,11 @@ npm test
   - feed configuration invariants;
   - formatting helpers;
   - the My List store.
-- **Component tests** (React Native Testing Library) render `MovieRow` against a mocked service. They check the loading, success, failure-with-retry and empty-hide behavior.
+- **Component and hook tests** (React Native Testing Library):
+  - `MovieRow` against a mocked service: loading, success, failure-with-retry and empty-hide;
+  - `ErrorBoundary`: fallback, reset and isolation from siblings;
+  - `PosterImage`: the resized → original → titled tile fallback chain;
+  - `useReduceMotion`: follows the system setting live.
 - Native modules are mocked in `jest.setup.ts`: config, MMKV and icons. Reanimated is replaced with a tiny synchronous double in `test/mocks/reanimated.ts`, because the official mock doesn't boot under the RN 0.88 preset.
 - **CI** (`.github/workflows/ci.yml`) runs the type check, lint (zero warnings) and tests with coverage on every push and PR. It needs no API key.
 
